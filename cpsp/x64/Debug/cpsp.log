@@ -1,0 +1,18 @@
+﻿  main.c
+C:\Users\admin\Desktop\CPSP\main.c(33,9): warning C4244: 'return': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(41,21): warning C4244: '=': 'int' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(50,14): error C2065: 'j': bildirimi yapılmamış tanımlayıcı
+C:\Users\admin\Desktop\CPSP\main.c(52,14): error C2065: 'j': bildirimi yapılmamış tanımlayıcı
+C:\Users\admin\Desktop\CPSP\main.c(139,2): warning C4013: 'srand' tanımsız; int döndüren extern olduğu varsayılıyor
+C:\Users\admin\Desktop\CPSP\main.c(139,8): warning C4013: 'time' tanımsız; int döndüren extern olduğu varsayılıyor
+C:\Users\admin\Desktop\CPSP\main.c(163,45): warning C4013: 'rand' tanımsız; int döndüren extern olduğu varsayılıyor
+C:\Users\admin\Desktop\CPSP\main.c(163,42): warning C4244: '=': 'int' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(164,44): warning C4244: '=': 'int' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(167,25): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(167,36): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(167,47): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(167,58): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(191,42): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(192,26): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(193,27): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(190,39): warning C4244: 'başlatılıyor': 'double' - 'float' dönüşümü; veri kaybı olabilir
