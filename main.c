@@ -405,13 +405,10 @@ void render() {
 void destroy() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_DestroyTexture(texture1);
-	SDL_DestroyTexture(texture2);
-	SDL_DestroyTexture(texture3);
-	SDL_FreeSurface(bg);
-	SDL_FreeSurface(r_car);
-	SDL_FreeSurface(b_car);
+	SDL_DestroyTexture(texture1 && texture2 && texture3 && texture4 && texture5 && numone && numtwo && numthree);
+	SDL_FreeSurface(bg && r_car && b_car && g_car && bravo && uno && dos && tres);
 	Mix_FreeMusic(music);
+	Mix_FreeChunk(crash && drive);
 	SDL_Quit();
 }
 
