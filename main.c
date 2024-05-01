@@ -6,13 +6,14 @@
 int game_is_running;
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
-SDL_Surface* bg = NULL, *b_car = NULL, *r_car = NULL, *g_car = NULL;
-SDL_Texture* texture1 = NULL, *texture2 = NULL, *texture3 = NULL, *texture4 = NULL;
+SDL_Surface* bg = NULL, * b_car = NULL, * r_car = NULL, * g_car = NULL, * bravo = NULL, * uno = NULL, * dos = NULL, * tres = NULL;
+SDL_Texture* texture1 = NULL, * texture2 = NULL, * texture3 = NULL, * texture4 = NULL, * texture5 = NULL, * numone = NULL, * numtwo = NULL, * numthree = NULL;
 Mix_Music* music = NULL;
+Mix_Chunk* crash = NULL, * drive = NULL;
 
 int last_frame_time = 0;
 int clicked_car_index = -1;
-int lvl = 3, dth = 0, noc, win, restart = TRUE, sound = TRUE, coll, r=0, g=0, b=0, fu = -50;
+int lvl = 1, dth = 0, noc, win, restart = TRUE, sound = TRUE, coll, r = 0, g = 0, b = 0, fu = -50;
 
 
 struct car {
@@ -20,11 +21,12 @@ struct car {
 	int color, que;
 }cars[15];
 
+
 SDL_bool check_collision(SDL_Rect rect1, SDL_Rect rect2) {
 	if (rect1.x < rect2.x + CAR_WIDTH &&
 		rect1.x + CAR_WIDTH > rect2.x &&
-		rect1.y < rect2.y + CAR_HEIGHT &&
-		rect1.y + CAR_HEIGHT > rect2.y)
+		rect1.y < rect2.y + CAR_HEIGHT-10 &&
+		rect1.y + CAR_HEIGHT-10 > rect2.y)
 		return TRUE;
 	return FALSE;
 }
@@ -34,24 +36,19 @@ float distance(int x1, int y1, int x2, int y2) {
 }
 
 void parking(int x) {
-	int temp = 0, j;
+	int temp = 0;
 	for (int i = 0; i < noc; i++) {
 		if (cars[i].color == x && cars[i].que != -1) {
-			fu -= 50;
-			cars[i].y = -200 + fu;
+			cars[i].y = -200;
 			cars[i].que = -2;
 		}
 		else if (cars[i].que > dth) {
 			if (temp == 0) {
 				cars[i].que = dth;
-				int j = i;
 				temp += 1;
 			}
-			else if(j < i)
+			else if(temp == 1)
 				cars[i].que = dth - 1;
-			else if(j > i)
-				cars[i].que = dth + 1;
-
 
 			switch (cars[i].que)
 			{
@@ -90,13 +87,13 @@ int init_window(void) {
 	}
 
 	window = SDL_CreateWindow(
-		NULL, 
+		NULL,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		W_WIDTH,
 		W_HEIGHT,
 		SDL_WINDOW_BORDERLESS
-		);
+	);
 	if (!window) {
 		fprintf(stderr, "error window\n");
 		return FALSE;
@@ -112,7 +109,11 @@ int init_window(void) {
 	b_car = SDL_LoadBMP("assets/car1.bmp");
 	r_car = SDL_LoadBMP("assets/rcar.bmp");
 	g_car = SDL_LoadBMP("assets/gcar.bmp");
-	if (!bg || !b_car || !r_car || !g_car) {
+	bravo = SDL_LoadBMP("assets/bravo.bmp");
+	uno = SDL_LoadBMP("assets/num_one.bmp");
+	dos = SDL_LoadBMP("assets/num_two.bmp");
+	tres = SDL_LoadBMP("assets/num_three.bmp");
+	if (!bg || !b_car || !r_car || !g_car || !bravo || !uno || !dos || !tres) {
 		fprintf(stderr, "error image\n");
 		return FALSE;
 	}
@@ -121,14 +122,20 @@ int init_window(void) {
 	texture2 = SDL_CreateTextureFromSurface(renderer, b_car);
 	texture3 = SDL_CreateTextureFromSurface(renderer, r_car);
 	texture4 = SDL_CreateTextureFromSurface(renderer, g_car);
-	if (!texture1 || !texture2 || !texture3 || !texture4) {
+	texture5 = SDL_CreateTextureFromSurface(renderer, bravo);
+	numone = SDL_CreateTextureFromSurface(renderer, uno);
+	numtwo = SDL_CreateTextureFromSurface(renderer, dos);
+	numthree = SDL_CreateTextureFromSurface(renderer, tres);
+	if (!texture1 || !texture2 || !texture3 || !texture4 || !texture5 || !numone || !numtwo || !numthree) {
 		fprintf(stderr, "error texture\n");
 		return FALSE;
 	}
 
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 3, 2048);
 	music = Mix_LoadMUS("assets/Death by Glamour.mp3");
-	if (!music) {
+	crash = Mix_LoadWAV("assets/car_crash.wav");
+	drive = Mix_LoadWAV("assets/car_drive.wav");
+	if (!music || !crash || !drive) {
 		fprintf(stderr, "error music\n");
 		return FALSE;
 	}
@@ -157,13 +164,13 @@ void setup() {
 		noc = 15;
 	win = noc;
 
-	for (int i = 0; i < noc; i++) { 	// Arabalarýn baþlangýç pozisyonlarý
+	for (int i = 0; i < noc; i++) { 	// ArabalarÄ±n baÅŸlangÄ±Ã§ pozisyonlarÄ±
 		do {
 			coll = FALSE;
 			cars[i].x = (W_WIDTH - CAR_WIDTH) / 2 + (rand() % 170 - 75); // starting x
 			cars[i].y = (W_HEIGHT - CAR_HEIGHT) / 2 + (rand() % 360 - 130); // starting y
 
-			for (int j = 0; j < i; j++) {     //üst üste araba çýkýþýný engelleme
+			for (int j = 0; j < i; j++) {     //Ã¼st Ã¼ste araba Ã§Ä±kÄ±ÅŸÄ±nÄ± engelleme
 				if (distance(cars[i].x, cars[i].y, cars[j].x, cars[j].y) < MIN_SPAWN_DISTANCE) {
 					coll = TRUE;
 					break;
@@ -186,9 +193,9 @@ void setup() {
 		}
 		cars[i].que = -1;
 
-		// Rastgele yönler ve hýz ayarlamasý
+		// Rastgele yÃ¶nler ve hÄ±z ayarlamasÄ±
 		float angle = (float)(rand() % 360) * (3.14159 / 180); // Radyan cinsinden
-		cars[i].angle = (angle * (180/3.14159))-90;
+		cars[i].angle = (angle * (180 / 3.14159)) - 90;
 		cars[i].dx = CAR_SPEED * cos(angle);
 		cars[i].dy = -CAR_SPEED * sin(angle);
 
@@ -202,7 +209,7 @@ void setup() {
 
 void process_input() {
 	SDL_Event event;
-	
+
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
@@ -218,7 +225,7 @@ void process_input() {
 				int x = event.button.x;
 				int y = event.button.y;
 
-				if (x >= 304 && y <= 52) {  //ses aç kapa
+				if (x >= 304 && y <= 52) {  //ses aÃ§ kapa
 					if (sound) {
 						Mix_PauseMusic();
 						sound = FALSE;
@@ -228,9 +235,10 @@ void process_input() {
 						sound = TRUE;
 					}
 				}
-				else if(y>=55){
+				else if (y >= 55) {
 					for (int i = 0; i < noc; i++) {
 						if (x >= cars[i].x && x <= cars[i].x + CAR_WIDTH && y >= cars[i].y && y <= cars[i].y + CAR_HEIGHT) {
+							Mix_PlayChannel(2, drive, 0);
 							clicked_car_index = i;
 							break;
 						}
@@ -249,21 +257,20 @@ void update() {
 	if (time_to_wait > 0 && time_to_wait <= FRAME_TARGET_TIME)
 		SDL_Delay(time_to_wait);
 
-	float delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f; //arabalarýn fps yerine saniye ile hareket etmesi için bir deðiþken
+	float delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f; //arabalarÄ±n fps yerine saniye ile hareket etmesi iÃ§in bir deÄŸiÅŸken
 
-	// Týklanan arabayý hareket ettir
+	// TÄ±klanan arabayÄ± hareket ettir
 	if (clicked_car_index != -1) {
 		cars[clicked_car_index].x += cars[clicked_car_index].dx * delta_time;
 		cars[clicked_car_index].y += cars[clicked_car_index].dy * delta_time;
 
-		// Duvar çarpýþma kontrolü
+		// Duvar Ã§arpÄ±ÅŸma kontrolÃ¼
 		if (cars[clicked_car_index].x <= 0 || cars[clicked_car_index].x >= W_WIDTH - CAR_WIDTH ||
 			cars[clicked_car_index].y <= 65 || cars[clicked_car_index].y >= W_HEIGHT - CAR_HEIGHT) {
 
 			win -= 1;
 			if (win == 0) {
 				lvl += 1;
-				printf("u win");
 				restart = TRUE;
 			}
 
@@ -293,7 +300,6 @@ void update() {
 			cars[clicked_car_index].que = dth;
 
 			if (dth == 5)
-				printf("try again");
 				restart = TRUE;
 
 			//1. - 91,30 /  2. -138,30  / 3. - 186,30 / 4. - 232,30  / 5. - 278,30
@@ -324,7 +330,7 @@ void update() {
 			}
 			cars[clicked_car_index].angle = 180;
 
-			if (r == 3) {  //araba yok etme çalýþmalarý
+			if (r == 3) {  //araba yok etme Ã§alÄ±ÅŸmalarÄ± (iÅŸe yaramama ihtimali var)
 				parking(1);
 				r -= 3;
 			}
@@ -337,17 +343,18 @@ void update() {
 				b -= 3;
 			}
 
-			printf("%d", dth);
-			clicked_car_index = -1; // týklanmýþ arabayý býrakma
+			clicked_car_index = -1; // tÄ±klanmÄ±ÅŸ arabayÄ± bÄ±rakma
 		}
 
-		// Diðer arabalarla çarpýþma kontrolü
+		// DiÄŸer arabalarla Ã§arpÄ±ÅŸma kontrolÃ¼
 		for (int i = 0; i < noc; i++) {
 			if (cars[i].que == -1) {
-				SDL_Rect clicked_car_rect = { (int)cars[clicked_car_index].x, (int)cars[clicked_car_index].y, CAR_WIDTH, CAR_HEIGHT };
+				SDL_Rect clicked_car_rect = { (int)cars[clicked_car_index].x, (int)cars[clicked_car_index].y, CAR_WIDTH, CAR_HEIGHT }; //Ã§alÄ±ÅŸÄ±yor ama hatalÄ± gÃ¶zÃ¼kÃ¼yor
 				if (i != clicked_car_index) {
 					SDL_Rect other_car_rect = { (int)cars[i].x, (int)cars[i].y, CAR_WIDTH, CAR_HEIGHT };
 					if (check_collision(clicked_car_rect, other_car_rect)) {
+						Mix_PlayChannel(3, crash, 0);
+						SDL_Delay(500);
 						clicked_car_index = -1;
 						restart = TRUE;
 						break;
@@ -363,6 +370,15 @@ void render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderCopy(renderer, texture1, NULL, NULL);
 	SDL_Point center = { CAR_WIDTH / 2,CAR_HEIGHT / 2 };
+	SDL_Rect lvlplace = { 8, 3, 50, 50 };
+	SDL_Rect winplace = { -10 , 320, 360, 200 };
+
+	if (lvl == 1)
+		SDL_RenderCopy(renderer, numone, NULL, &lvlplace);
+	else if (lvl == 2)
+		SDL_RenderCopy(renderer, numtwo, NULL, &lvlplace);
+	else
+		SDL_RenderCopy(renderer, numthree, NULL, &lvlplace);
 
 	if (!sound)
 		SDL_RenderDrawLine(renderer, 310, 8, 350, 52);
@@ -379,7 +395,7 @@ void render() {
 			SDL_RenderCopyEx(renderer, texture2, NULL, &car_rect, -cars[i].angle, &center, SDL_FLIP_NONE);
 		else if (cars[i].color == 2)
 			SDL_RenderCopyEx(renderer, texture4, NULL, &car_rect, -cars[i].angle, &center, SDL_FLIP_NONE);
-		else if(cars[i].color == 1)
+		else if (cars[i].color == 1)
 			SDL_RenderCopyEx(renderer, texture3, NULL, &car_rect, -cars[i].angle, &center, SDL_FLIP_NONE);
 	}
 
