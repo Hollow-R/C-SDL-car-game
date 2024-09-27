@@ -1,0 +1,22 @@
+﻿  main.c
+C:\Users\admin\Desktop\CPSP\main.c(35,9): warning C4244: 'return': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(146,2): warning C4013: 'srand' tanımsız; int döndüren extern olduğu varsayılıyor
+C:\Users\admin\Desktop\CPSP\main.c(146,8): warning C4013: 'time' tanımsız; int döndüren extern olduğu varsayılıyor
+C:\Users\admin\Desktop\CPSP\main.c(170,45): warning C4013: 'rand' tanımsız; int döndüren extern olduğu varsayılıyor
+C:\Users\admin\Desktop\CPSP\main.c(170,42): warning C4244: '=': 'int' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(171,44): warning C4244: '=': 'int' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(174,25): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(174,36): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(174,47): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(174,58): warning C4244: 'işlev': 'float' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(198,45): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(199,26): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(200,27): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(197,39): warning C4244: 'başlatılıyor': 'double' - 'float' dönüşümü; veri kaybı olabilir
+C:\Users\admin\Desktop\CPSP\main.c(408,98): warning C4047: 'işlev': 'SDL_Texture *', yöneltme düzeyi sayısı bakımından 'int' ile aynı değil
+C:\Users\admin\Desktop\CPSP\main.c(408,98): warning C4024: 'SDL_DestroyTexture': 1 biçimsel ve gerçek parametresi için farklı türler
+C:\Users\admin\Desktop\CPSP\main.c(409,71): warning C4047: 'işlev': 'SDL_Surface *', yöneltme düzeyi sayısı bakımından 'int' ile aynı değil
+C:\Users\admin\Desktop\CPSP\main.c(409,71): warning C4024: 'SDL_FreeSurface': 1 biçimsel ve gerçek parametresi için farklı türler
+C:\Users\admin\Desktop\CPSP\main.c(411,22): warning C4047: 'işlev': 'Mix_Chunk *', yöneltme düzeyi sayısı bakımından 'int' ile aynı değil
+C:\Users\admin\Desktop\CPSP\main.c(411,22): warning C4024: 'Mix_FreeChunk': 1 biçimsel ve gerçek parametresi için farklı türler
+  cpsp.vcxproj -> C:\Users\admin\Desktop\cpsp\x64\Debug\cpsp.exe
